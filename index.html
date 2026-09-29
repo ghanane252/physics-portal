@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Physics Portal & Modern Applications</title>
+    <style>
+        /* --- 1. CSS STYLING --- */
+        :root {
+            --primary-color: #dcb3ff; /* Neon Light Purple */
+            --secondary-color: #8a2be2; /* Vibrant Purple */
+            --bg-dark: #0b071e; /* Deep Cosmic Dark Background */
+            --card-bg: #191235; /* Dark Purple Card Background */
+            --text-light: #f5f7fa;
+            --accent-color: #ff79c6; /* Neon Pink */
+            --footer-bg: #090514;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* Navigation Bar */
+        header {
+            background: rgba(25, 18, 53, 0.95);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.6);
+            border-bottom: 1px solid rgba(138, 43, 226, 0.3);
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 15px 20px;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--primary-color);
+            text-shadow: 0 0 10px var(--secondary-color);
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 20px;
+        }
+
+        .nav-links a {
+            color: var(--text-light);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary-color);
+        }
+
+        /* Main Sections */
+        section {
+            padding: 120px 20px 60px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 32px;
+            margin-bottom: 40px;
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--secondary-color);
+            padding-bottom: 10px;
+            display: inline-block;
+        }
+
+        /* Grid Layout */
+        .physics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 25px;
+            margin-top: 20px;
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+            transition: transform 0.3s, box-shadow 0.3s;
+            border-top: 4px solid var(--secondary-color);
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(138, 43, 226, 0.4);
+        }
+
+        .card h3 {
+            color: var(--primary-color);
+            margin-bottom: 15px;
+            font-size: 19px;
+        }
+
+        /* See More Functionality */
+        .more-content {
+            display: none;
+            color: #d1cedb;
+        }
+
+        .see-more-link {
+            color: var(--primary-color);
+            cursor: pointer;
+            font-weight: bold;
+            margin-left: 5px;
+            display: inline-block;
+            transition: color 0.2s;
+        }
+
+        .see-more-link:hover {
+            color: var(--accent-color);
+            text-decoration: underline;
+        }
+
+        .post-text {
+            font-size: 15px;
+            color: var(--text-light);
+        }
+        /* --- Refraction Section Optimized to Fill Empty Space --- */
+        .refraction-container {
+            background: var(--card-bg);
+            padding: 40px;
+            border-radius: 15px;
+            margin-top: 25px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+        }
+
+        .refraction-example {
+            display: flex;
+            flex-direction: row;
+            gap: 40px;
+            align-items: center;
+            justify-content: center;
+            margin-top: 30px;
+        }
+
+        /* Balanced layout sharing space equally */
+        .refraction-text {
+            flex: 1.2; 
+            min-width: 300px;
+        }
+
+        .refraction-text h4 {
+            color: var(--primary-color);
+            font-size: 22px;
+            margin-bottom: 15px;
+        }
+
+        .refraction-text ul {
+            list-style-position: inside;
+        }
+
+        .refraction-text li {
+            margin-bottom: 12px;
+            font-size: 16px;
+        }
+
+        /* Image Box Container with balanced scale */
+        .refraction-visual {
+            flex: 1;
+            min-width: 320px;
+            max-width: 350px; /* Prevents image from becoming overly large on big screens */
+            text-align: center;
+            background: #090514;
+            padding: 15px;
+            border-radius: 12px;
+            border: 1px dashed var(--secondary-color);
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.6);
+        }
+
+        .refraction-image {
+            width: 100%;
+            height: auto;
+            height: 250px;
+            object-fit: cover;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+            transition: transform 0.3s ease;
+            display: block;
+        }
+
+        .refraction-image:hover {
+            transform: scale(1.02);
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-block;
+            background: linear-gradient(45deg, var(--secondary-color), var(--accent-color));
+            color: white;
+            padding: 14px 30px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: bold;
+            margin-top: 25px;
+            transition: opacity 0.3s, transform 0.2s;
+            box-shadow: 0 4px 15px rgba(138, 43, 226, 0.4);
+        }
+
+        .btn:hover {
+            opacity: 0.9;
+            transform: scale(1.03);
+        }
+
+        .highlight {
+            color: var(--accent-color);
+            font-weight: bold;
+        }
+
+        /* --- Footer Styles --- */
+        footer {
+            background-color: var(--footer-bg);
+            color: #a5a1b8;
+            padding: 40px 20px;
+            margin-top: auto; /* Pushes footer to bottom */
+            border-top: 1px solid rgba(138, 43, 226, 0.2);
+            text-align: center;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .footer-title {
+            color: var(--primary-color);
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+            list-style: none;
+            margin: 10px 0;
+        }
+
+        .footer-links a {
+            color: #a5a1b8;
+            text-decoration: none;
+            transition: color 0.3s;
+            font-size: 14px;
+        }
+
+        .footer-links a:hover {
+            color: var(--accent-color);
+        }
+
+        .footer-contact {
+            font-size: 14px;
+        }
+
+        .footer-contact span {
+            color: var(--primary-color);
+        }
+
+        .copyright {
+            font-size: 12px;
+            color: #66617a;
+            margin-top: 10px;
+        }
+        /* Responsive Breakpoint for Refraction Section */
+        @media (max-width: 768px) {
+            .refraction-example {
+                flex-direction: column;
+            }
+            .refraction-visual {
+                max-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <nav>
+            <div class="logo">PhysicsPortal</div>
+            <ul class="nav-links">
+                <li><a href="#topic1">Topic 1: Classifications</a></li>
+                <li><a href="#topic2">Topic 2: Integration</a></li>
+                <li><a href="#topic3">Topic 3: Light Refraction</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section id="topic1">
+        <h2 class="section-title">Topic 1: Foundations & Branches of Modern Physics</h2>
+        <p style="margin-bottom: 20px;">Click "See more" to expand and explore the core details of each physical field:</p>
+        
+        <div class="physics-grid">
+            <div class="card">
+               
+                <h3>Applied Physics</h3>
+                <p class="post-text">
+                     Fiber Optics and the Communication Revolution
+                    <span class="more-content"> Fiber optic technology relies fundamentally on the phenomenon of light refraction, specifically "Total Internal Reflection" (TIR). This occurs when light travels through a core material and hits the boundary of a cladding material with a lower refractive index at a specific angle. By precisely engineering these refractive indices, light is trapped inside the core, bending continuously to transmit massive amounts of data at the speed of light across global telecommunication networks with minimal signal loss.
+                       <br> Source Book:*Fundamentals of Photonics* by Bahaa E. A. Saleh and Malvin Carl Teich.</span>
+                    <span class="see-more-link" onclick="togglePost(this)">... See more</span>
+                </p>
+            </div>
+
+            <div class="card">
+                <h3>Theoretical Physics</h3>
+                <p class="post-text">
+                    Fermat’s Principle and the Path of Least Time
+                    <span class="more-content"> In theoretical physics, light refraction is not viewed merely as a geometric bending of rays, but as a direct consequence of Fermat’s Principle of Least Time. The principle states that when light travels between two points through different media (such as air and glass), it chooses the path that minimizes the travel time rather than the spatial distance. The sudden change of direction at the interface is a mathematical optimization of time, serving as a foundational concept for understanding Hamilton's principle and the laws of classical and quantum mechanics.<br>
+                    Source Book:*Introduction to Electrodynamics* by David J. Griffiths.
+                    </span>
+                    <span class="see-more-link" onclick="togglePost(this)">... See more</span>
+                </p>
+            </div>
+
+            <div class="card">
+                <h3>Physics and AI</h3>
+                <p class="post-text">
+                    Photonic Neural Networks and Intelligent Refraction Modeling
+                    <span class="more-content">The intersection of Artificial Intelligence and physics has birthed two major innovations. First, Machine Learning models are widely used to predict and simulate how light refracts through chaotic, complex media like atmospheric turbulence or biological tissues. Second, researchers are developing "Photonic Computing" systems where optical neural networks use light refraction instead of electricity. By controlling laser refraction angles within microchips, AI processing speeds are accelerated exponentially, eliminating electronic latency.<br>
+                     Source Book:*Photonics for Artificial Intelligence* by Yueting Chen / *Artificial Intelligence in Physics* (AIP Publishing).
+                    </span>
+                    <span class="see-more-link" onclick="togglePost(this)">... See more</span>
+                </p>
+            </div>
+
+            <div class="card">
+                <h3>Medical Physics</h3>
+                <p class="post-text">
+                  Biophotonics and Optical Corrections of Human Vision
+                    <span class="more-content">Medical physics treats the human eye as a complex biological optical system governed by light refraction. The cornea and the crystalline lens act as natural convex lenses that refract incoming light rays to focus them sharply onto the retina. When refractive errors occur—such as myopia (nearsightedness) or hyperopia (farsightedness) due to improper eye curvature—medical physicists design corrective lenses or laser surgery profiles to adjust the refraction angle, restoring the focal point precisely to the retina.<br> 
+                      Source Book:*Intermediate Physics for Medicine and Biology* by Russell K. Hobbie and Bradley J. Roth.
+                    </span>
+                    <span class="see-more-link" onclick="togglePost(this)">... See more</span>
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <section id="topic2" style="background-color: #080417;">
+        <h2 class="section-title">Topic 2: Interdisciplinary Scientific Integration</h2>
+        <p style="text-align: center; margin-bottom: 20px;">Scientific fields do not operate in isolation; they create a highly collaborative ecosystem:</p>
+        <div class="physics-grid">
+            <div class="card" style="border-top-color: var(--accent-color); max-width: 600px; margin: 0 auto;">
+              <h3>The Scientific Loop</h3>
+                <p>A breakthrough begins in <span class="highlight">Theoretical Physics</span> as an equation. Then, <span class="highlight">Applied Physics</span> engineering turns it into a functional tool. Next, <span class="highlight">Artificial Intelligence</span> optimizes its performance and parameters. Finally, it delivers life-saving value through <span class="highlight">Medical Physics</span> applications.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="topic3">
+        <h2 class="section-title">Topic 3: Comprehensive Case Study (Light Refraction)</h2>
+        
+        <div class="refraction-container">
+            <p><strong>Refraction of Light:</strong> It is the phenomenon where the direction of a light wave changes as it passes from one transparent medium to another with a different optical density (such as moving from air into water or glass).</p>
+            
+            <div class="refraction-example">
+                <div class="refraction-text">
+                    <h4>How Refraction Connects All Four Fields:</h4>
+                    <ul>
+                        <li><strong>Theoretical:</strong> Studying the mathematical models of "Snell-Descartes Law".</li>
+                        <li><strong>Applied:</strong> Manufacturing optical prisms, consumer glasses, and fiber optics.</li>
+                        <li><strong>AI & Technology:</strong> Instant algorithmic prediction of light bending paths in complex mediums.</li>
+                        <li><strong>Medical:</strong> Analyzing how light bends through the human cornea and crystalline lens to correct vision errors.</li>
+                    </ul>
+                </div>
+                
+                <div class="refraction-visual">
+                    <img src="exmple.jpg" alt="Light Refraction Diagram" class="refraction-image" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1507668077129-56e32842fceb?auto=format&fit=crop&w=500&q=80';">
+                </div>
+            </div>
+
+            <div style="text-align: center; margin-top: 30px;">
+                <p>To view an interactive, real-time physics simulation of light bending and changing media:</p>
+                <a href="index.html" target="_blank" class="btn">Launch Interactive Simulation</a>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-title">4<sup>ème</sup> JSPP — Physics Department (UMBB)</div>
+            <p style="font-size: 14px;">4<sup>ème</sup> Journées Scientifiques et Pédagogiques de la Physique</p>
+            
+            <ul class="footer-links">
+                <li><a href="#topic1">Classifications</a></li>
+                <li><a href="#topic2">Integration</a></li>
+                <li><a href="#topic3">Case Study</a></li>
+            </ul>
+
+            <div class="footer-contact">
+                Contact: <span>jsppumbbcontact@gmail.com</span>
+            </div>
+            
+            <div class="copyright">
+                &copy; 2026 PhysicsPortal. Built with passion for scientific exploration.
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        function togglePost(element) {
+            const parentParagraph = element.parentElement;
+            const moreContent = parentParagraph.querySelector('.more-content');
+            
+            moreContent.style.display = "inline";
+            element.style.display = "none";
+        }
+    </script>
+</body>
+</html>  
