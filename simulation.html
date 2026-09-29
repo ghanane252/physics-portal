@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <title>simulaton</title>
+    <style>
+        body, html { 
+            margin: 0; 
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            background: #010103; 
+            overflow: hidden;
+        }
+        canvas {
+            display: block;
+            width: 100vw;
+            height: 100vh;
+            cursor: none;
+        }
+    </style>
+</head>
+<body>
+
+    <canvas id="paintCanvas"></canvas>
+
+    <script>
+        const canvas = document.getElementById("paintCanvas");
+        const ctx = canvas.getContext("2d");
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+
+        let prismX = window.innerWidth / 2;
+        let prismY = window.innerHeight / 2; 
+
+        // توليد النجوم
+        const stars = [];
+        const numStars = 120;
+        for (let i = 0; i < numStars; i++) {
+            stars.push({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                size: Math.random() * 2 + 0.5,
+                speed: Math.random() * 1.2 + 0.3
+            });
+        }
+
+        const rainbowColors = [
+            { color: "rgba(255, 0, 0, 0.9)", offset: -40 },
+            { color: "rgba(255, 127, 0, 0.9)", offset: -27 },
+            { color: "rgba(255, 255, 0, 0.9)", offset: -14 },
+            { color: "rgba(0, 255, 0, 0.9)", offset: 0 },
+            { color: "rgba(0, 170, 255, 0.9)", offset: 14 },
+            { color: "rgba(75, 0, 130, 0.9)", offset: 27 },
+            { color: "rgba(148, 0, 211, 0.9)", offset: 40 }
+        ];
+
+        window.addEventListener("mousemove", (e) => {
+            prismX = e.clientX;
+            prismY = e.clientY;
+        });
+
+        // دالة رياضية دقيقة لكشف دخول النجم داخل حدود المثلث
+        function isPointInTriangle(px, py, ax, ay, bx, by, cx, cy) {
+            let v0x = cx - ax, v0y = cy - ay;
+            let v1x = bx - ax, v1y = by - ay;
+            let v2x = px - ax, v2y = py - ay;
+            let dot00 = v0x * v0x + v0y * v0y;
+            let dot01 = v0x * v1x + v0y * v1y;
+            let dot02 = v0x * v2x + v0y * v2y;
+            let dot11 = v1x * v1x + v1y * v1y;
+            let dot12 = v1x * v2x + v1y * v2y;
+            let invDenom = 1 / (dot00 * dot11 - dot01 * dot01);
+            let u = (dot11 * dot02 - dot01 * dot12) * invDenom;
+            let v = (dot00 * dot12 - dot01 * dot02) * invDenom;
+            return (u >= 0) && (v >= 0) && (u + v < 1);
+        }
+
+        function drawScene() {
+            ctx.fillStyle = "#010104";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            const prismSize = 75;
+            const p1 = { x: prismX, y: prismY - prismSize };          
+            const p2 = { x: prismX - prismSize, y: prismY + prismSize }; 
+            const p3 = { x: prismX + prismSize, y: prismY + prismSize }; 
+
+            // 1. رسم النجوم وتحريكها
+            stars.forEach(star => {
+                ctx.fillStyle = "#ffffff";
+                ctx.beginPath();
+                ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
+                ctx.fill();
+
+                // التحقق من اصطدام النجم بالمثلث
+                const isInside = isPointInTriangle(star.x, star.y, p1.x, p1.y, p2.x, p2.y, p3.x, p3.y);
+
+                if (isInside) {
+                    // عندما يصبح النجم داخل المثلث، تخرج الألوان فوراً من الجانب الأيمن للمثلث
+                    rainbowColors.forEach(item => {
+                        ctx.save();
+                        ctx.beginPath();
+                        ctx.strokeStyle = item.color;
+                        ctx.lineWidth = 12; // حزمة عريضة مدمجة
+                        ctx.shadowBlur = 25;
+                        ctx.shadowColor = item.color;
+                        
+                        // نقطة الانطلاق من موقع النجم الحالي داخل المنشور إلى نهاية الشاشة يميناً
+                        ctx.moveTo(star.x, star.y);
+                        ctx.lineTo(canvas.width, star.y + item.offset * 4);
+                        ctx.stroke();
+                        ctx.restore();
+                    });
+                }
+
+                // حركة النجم أفقياً
+                star.x += star.speed;
+                if (star.x > canvas.width) {
+                    star.x = 0;
+                    star.y = Math.random() * canvas.height;
+                }
+            });
+
+            // 2. رسم المنشور الكريستالي المتوهج
+            ctx.save();
+            ctx.beginPath();
+            ctx.moveTo(p1.x, p1.y);
+            ctx.lineTo(p2.x, p2.y);
+            ctx.lineTo(p3.x, p3.y);
+            ctx.closePath();
+            
+            ctx.fillStyle = "rgba(6, 8, 14, 0.95)"; // عزل النجوم التي تمر خلفه
+            ctx.fill();
+            
+            ctx.strokeStyle = "rgba(255, 255, 255, 0.9)";
+            ctx.lineWidth = 3.5;
+            ctx.shadowBlur = 30;
+            ctx.shadowColor = "#00d2ff";
+            ctx.stroke();
+
+            // الضلع الداخلي ثلاثي الأبعاد
+            ctx.beginPath();
+            ctx.moveTo(p1.x, p1.y);
+            ctx.lineTo(prismX, p2.y);
+            ctx.strokeStyle = "rgba(255, 255, 255, 0.2)";
+            ctx.lineWidth = 1.5;
+            ctx.stroke();
+            ctx.restore();
+
+            requestAnimationFrame(drawScene);
+        }
+
+        requestAnimationFrame(drawScene);
+    </script>
+</body>
+</html>
